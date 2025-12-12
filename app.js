@@ -82,6 +82,63 @@ app.get("/api/movies", async (req, res) => {
   }
 });
 
+app.delete('/api/movies/:id', async (req, res) => {
+  try {
+    const fileId = req.params.id;
+
+    // 1. Find the file record in your database using the ID
+    // Example: const fileRecord = await FileModel.findById(fileId);
+    // if (!fileRecord) return res.status(404).send('File not found');
+
+    const filePath = fileRecord.path; // Assuming your model has a 'path' field
+
+    // ... proceed to Step 3 and 4
+  } catch (error) {
+    res.status(500).send('Error deleting file record');
+  }
+});
+
+app.put('/api/movies/:id', upload.single('image'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, year,rating,description } = req.body;
+    const updateData = await Movie.findById(id);
+    if (!updateData) {
+      return res.status(404).json({ error: 'Movie not found' });
+    } 
+
+    // Build update object
+  // Start with existing data
+   
+    if (req.file) {
+      updateData.image = req.file.path; // Update profile picture path if a new file is uploaded
+    }
+ if (rating) {
+      updateData.rating = rating; // Update profile picture path if a new file is uploaded
+    }
+
+    if (name) {
+      updateData.name= name; // Update profile picture path if a new file is uploaded
+    }
+
+    if (year) {
+      updateData.year = year; // Update profile picture path if a new file is uploaded
+    }
+    if (description) {
+      updateData.description = description; // Update profile picture path if a new file is uploaded
+    }
+    
+    await updateData.save();
+   
+
+   
+    res.status(200).json(updateData);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
