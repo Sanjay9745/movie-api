@@ -84,13 +84,15 @@ app.get("/api/movies", async (req, res) => {
 
 app.delete('/api/movies/:id', async (req, res) => {
   try {
-    const fileId = req.params.id;
+    const {id} = req.params.id;
+    await Movie.findByIdAndDelete(id)
+    res.status(204).json({messsage:'deleted successfully'})
 
     // 1. Find the file record in your database using the ID
     // Example: const fileRecord = await FileModel.findById(fileId);
     // if (!fileRecord) return res.status(404).send('File not found');
 
-    const filePath = fileRecord.path; // Assuming your model has a 'path' field
+    // const filePath = fileRecord.path; // Assuming your model has a 'path' field
 
     // ... proceed to Step 3 and 4
   } catch (error) {
